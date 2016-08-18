@@ -116,7 +116,7 @@ MonoBehaviour:
   uIType: 0
   defaultShieldColor: {r: 0, g: 0, b: 0, a: 0.25}
   firstSceneName: Intro
-  LoadingJobSceneName: 
+  LoadingJobSceneName: Loading
   popUpSceneName: 
   menuSceneName: 
   editorLocalLoadAssetBundle: 1
