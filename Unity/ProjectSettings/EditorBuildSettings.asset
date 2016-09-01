@@ -19,3 +19,5 @@ EditorBuildSettings:
     path: Assets/Scenes/Quest.unity
   - enabled: 1
     path: Assets/Scenes/Loading.unity
+  - enabled: 1
+    path: Assets/Scenes/Battle.unity

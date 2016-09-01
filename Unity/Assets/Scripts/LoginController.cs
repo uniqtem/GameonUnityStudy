@@ -32,15 +32,7 @@ public class LoginController : SceneController
 
         button.onClick.AddListener (delegate() {
             Debug.Log ("OnClick");
-
-            AssetBundleData assetBundle = new AssetBundleData ("master");
-            assetBundle.type = typeof(TextAsset);
-            assetBundle.objName = "quest";
-
-            LoadingJobData jobData = new LoadingJobData ("Quest");
-            jobData.assetBundles.Add (assetBundle);
-
-            SceneManager.Instance.LoadingJob (jobData);
+            QuestController.Main ();
         });
     }
 

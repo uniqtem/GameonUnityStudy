@@ -2,6 +2,13 @@
 using System.Collections;
 using Hellgate;
 
+public enum BattleStatus
+{
+    Play,
+    Clear,
+    Die
+}
+
 public class BattleController : SceneController
 {
     [SerializeField]
@@ -15,15 +22,14 @@ public class BattleController : SceneController
     private float currentTime;
     private int count;
     private int currentCount;
+    public BattleStatus status;
+    private QuestData data;
 
     public override void OnSet (object data)
     {
         base.OnSet (data);
-    }
 
-    public override void Start ()
-    {
-        base.Start ();
+        this.data = data as QuestData;
 
         spawns = spawn.GetComponentsInChildren<Transform> ();
 
@@ -31,11 +37,17 @@ public class BattleController : SceneController
         currentCount = 0;
 
         time = 1f;
-        count = 10;
+        count = this.data.Count;
+
+        status = BattleStatus.Play;
     }
 
     void Update ()
     {
+        if (status != BattleStatus.Play) {
+            return;
+        }
+
         currentTime += Time.deltaTime;
         if (currentTime >= time) {
             currentTime = 0;
@@ -51,8 +63,32 @@ public class BattleController : SceneController
                 MonsterScript script = gObj.GetComponent<MonsterScript> ();
                 script.target = 
                     user.transform.position - gObj.transform.position;
-//                script.speed = 10f;
+                script.speed = (float)data.Speed;
+
+                // last
+                if (currentCount == count) {
+                    SceneManager.Instance.Wait (10f, delegate() {
+                        Clear ();
+                    });
+                }
             }
         }
+    }
+
+    public void Clear ()
+    {
+        status = BattleStatus.Clear;
+        SceneManager.Instance.PopUp ("Clear !!", PopUpType.Ok, delegate(PopUpYNType type) {
+            Register.SetInt ("Quest" + data.Idx, data.Idx);
+            QuestController.Main ();
+        });
+    }
+
+    public void Die ()
+    {
+        status = BattleStatus.Die;
+        SceneManager.Instance.PopUp ("Die !!", PopUpType.Ok, delegate(PopUpYNType type) {
+            QuestController.Main ();
+        });
     }
 }
